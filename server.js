@@ -10,10 +10,11 @@ const jwt = require('jsonwebtoken');
 
 const cloudinary = require('cloudinary').v2;
 
+console.log(process.env.cloud_name)
 cloudinary.config({
-  cloud_name: 'vpt1ntb5',
-  api_key: '377435512591871',
-  api_secret: 'tZmaiHnTHP9_oI0oyAp2jBcWjs4'
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
 });
 
 const app = express();
