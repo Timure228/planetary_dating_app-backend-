@@ -125,7 +125,7 @@ app.post('/api/login', async (req, res) => {
   if (!validPassword) return res.status(400).json({error: "Wrong password. Try again."});
     
   const token = jwt.sign({ username: user.username }, JWT_SECRET, { expiresIn: "1d" });
-  res.json({message: "Logged in!", token, username: user.username});
+  res.json({message: "Logged in!", token, username: user.username, image_url: user.image_url});
 })
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
