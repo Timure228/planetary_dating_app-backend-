@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const cors = require('cors');
 const { Pool } = require('pg');
 const multer = require('multer');
@@ -109,7 +108,6 @@ app.post('/api/register', upload.single('image_file'), async (req, res) => {
    );
    stream.end(req.file.buffer);
   });
-  fs.unlinkSync(req.file.path);
   const image_name = cloudinaryResult.secure_url;
 
   const query = 'INSERT INTO profiles (username, password, age, gender, city, interested_in, bio, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
