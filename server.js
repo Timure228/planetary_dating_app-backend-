@@ -94,7 +94,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 // The API endpoint to post new data
 app.post('/api/register', upload.single('image_file'), async (req, res) => {
@@ -102,7 +102,13 @@ app.post('/api/register', upload.single('image_file'), async (req, res) => {
   
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const cloudinaryResult = await cloudinary.uploader.upload(req.file.path);
+  const result = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'profile_photos' },
+      (error, result) => error ? reject(error) : resolve(result)
+   );
+   stream.end(req.file.buffer);
+  });
   fs.unlinkSync(req.file.path);
   const image_name = cloudinaryResult.secure_url;
 
