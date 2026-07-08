@@ -92,6 +92,7 @@ app.get('/api/messages', authenticateToken, async (req, res) => {
       FROM messages m
       JOIN profiles p 
       ON m.message_sender = p.username
+      WHERE m.message_sender = $1 OR m.message_receiver = $1
     `;
     const { rows } = await pool.query(query, [current_user]);
     res.json(rows); // Sends the data object to React
