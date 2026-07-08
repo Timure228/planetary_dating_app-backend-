@@ -82,6 +82,24 @@ app.get('/api/likes', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/api/messages', authenticateToken, async (req, res) => {
+  try {
+    const current_user = req.user.username;
+    const query = `
+      SELECT 
+      m.message_sender,
+      p.image_url
+      FROM messages m
+      JOIN profiles p 
+      ON s.message_sender = p.username
+    `;
+    const { rows } = await pool.query(query, [current_user]);
+    res.json(rows); // Sends the data object to React
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 // Configure Multer to control where and how files are saved
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -150,6 +168,26 @@ app.post('/api/swipe', authenticateToken, async (req, res) =>
     res.status(201).json({ 
       message: 'Swipe successfully saved!', 
       swipe: result.rows[0] 
+    });
+  }
+) 
+
+app.post('/api/message', authenticateToken, async (req, res) => 
+  {
+    const message_sender = req.user.username;
+    const {message_receiver, message} = req.body;
+
+    const query = `
+      INSERT INTO messages (message_sender, message_receiver, message) 
+      VALUES ($1, $2, $3) 
+      RETURNING *;
+    `;
+    const values = [message_sender, message_receiver, message];
+
+    const result = await pool.query(query, values);
+
+    res.status(201).json({ 
+      message: 'Message sent successfully!',  
     });
   }
 ) 
