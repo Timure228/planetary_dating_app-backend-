@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 
 const cloudinary = require('cloudinary').v2;
 
-console.log(process.env.cloud_name)
 cloudinary.config({
   cloud_name: process.env.cloud_name,
   api_key: process.env.api_key,
@@ -25,11 +24,10 @@ app.use(express.json());  // Allows the server to read JSON sent from React
 
 // Connect to your PostgreSQL database using your credentials
 const pool = new Pool({
-  host: "localhost",
-  port: 8081,
-  user: "postgres",
-  password: "123123",
-  database: "planetary_dating_app_db"
+  connectionString: process.env.connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 const JWT_SECRET = "dDkf3*_j4r41!*89De_1" 
