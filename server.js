@@ -93,7 +93,7 @@ app.get('/api/messages', authenticateToken, async (req, res) => {
       FROM messages m
       JOIN profiles p 
       ON m.message_sender = p.username
-      m.message_receiver = $1
+      WHERE m.message_receiver = $1
       ORDER BY m.created_at ASC
     `;
     const { rows } = await pool.query(query, [current_user]);
