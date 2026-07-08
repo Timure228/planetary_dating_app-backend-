@@ -102,7 +102,7 @@ app.post('/api/register', upload.single('image_file'), async (req, res) => {
   
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const result = await new Promise((resolve, reject) => {
+  const cloudinaryResult = await new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       { folder: 'profile_photos' },
       (error, result) => error ? reject(error) : resolve(result)
