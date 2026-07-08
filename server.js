@@ -91,14 +91,14 @@ app.get('/api/messages', authenticateToken, async (req, res) => {
       p.image_url
       FROM messages m
       JOIN profiles p 
-      ON s.message_sender = p.username
+      ON m.message_sender = p.username
     `;
     const { rows } = await pool.query(query, [current_user]);
     res.json(rows); // Sends the data object to React
   } catch (err) {
     console.error(err);
   }
-});
+}); 
 
 // Configure Multer to control where and how files are saved
 const storage = multer.diskStorage({
